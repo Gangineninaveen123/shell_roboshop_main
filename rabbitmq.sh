@@ -1,6 +1,6 @@
 #!/bin/bash
 source ./commoncode.sh
-
+#appname or module name
 App_Name=rabbitmq
 
 #checking app is running with root access or not and calling function
