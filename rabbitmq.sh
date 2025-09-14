@@ -12,7 +12,7 @@ read -s RABBITMQ_PASSWORD
 echo -e "$RABBITMQ_PASSWORD"
 
 #Copying rabbit mq file to yum.reposd for dependencies configurations
-cp $SCRIPT_DIR/10-rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo
+cp $SCRIPT_DIR/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo
 VALIDATE $? "Copying raqbbitmq repo file to yum.repos.d file for dependencies configurations"
 
 #Installing rabbitmq server
