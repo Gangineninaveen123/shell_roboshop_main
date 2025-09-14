@@ -1,7 +1,7 @@
 #!/bin/bash
 source ./commoncode.sh
-
-App_Name=mysql
+#app name or module
+App_Name=muruga
 
 #checking app is running with root access or not and calling function
 check_root
