@@ -99,6 +99,20 @@ check_root(){
 }
 
 
+#Maven setup
+maven_setup(){
+    #Installling maven along with java
+    dnf install maven -y &>> $LOG_FILE
+    VALIDATE $? "Installing Maven"
+
+    #maven clean package, packing everything to run our application, mvn life cycle also ll come here
+    mvn clean package  &>> $LOG_FILE
+    VALIDATE $? "Packaging the shipping application"
+
+    #Moving and renaming the Jar file
+    mv target/shipping-1.0.jar shipping.jar &>> $LOG_FILE
+    VALIDATE $? "Moving and renaming the Jar file"
+}
 #, here $1 -> means takes exit code $? as input $2 argument, which is given in the code, while calliong function
 
 VALIDATE()

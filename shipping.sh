@@ -11,56 +11,19 @@ echo "Please enter the root password"
 read -s MYSQL_ROOT_PASSWORD
 echo -e "$MYSQL_ROOT_PASSWORD"
 
-#Installling maven along with java
-dnf install maven -y &>> $LOG_FILE
-VALIDATE $? "Installing Maven"
 
+
+#app setup
 #Creating system user roboshop to run the roboshop app
 #while, running it on second time, i got an error at system user gort failed, so using idempotency : sol for this is idempotency->, which irrespective of the number of times you run, nothing changes
+app_setup
 
-id roboshop
-if [ $? -ne 0 ]
-then
-    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
-    VALIDATE $? "Creating system user roboshop"
-else
-    echo -e "System user roboshop already created ... $Y Skipping $N"
-fi
 
-# Creating app directory to store our shipping code info
-mkdir -p /app # if already create also, it ll not show error at run time [-p]
-VALIDATE $? "Creating app directory"
-
-#Downloading shipping code in tmp folder
-curl -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip &>>$LOG_FILE
-VALIDATE $? "Downloading shipping code"
-
-#Unzipping shipping code info into app directory
-rm -rf /app/* # i am deleteing the content in app directory, because in log files , its asking for oveeride the previous content, so simply ll delete the data, so no ovveride needed.
-cd /app 
-unzip /tmp/shipping.zip &>>$LOG_FILE
-VALIDATE $? "Unzipping shipping code info into app directory"
-
-#maven clean package, packing everything to run our application, mvn life cycle also ll come here
-mvn clean package  &>> $LOG_FILE
-VALIDATE $? "Packaging the shipping application"
-
-#Moving and renaming the Jar file
-mv target/shipping-1.0.jar shipping.jar &>> $LOG_FILE
-VALIDATE $? "Moving and renaming the Jar file"
+#maven setup calling
+maven_setup
 
 #Copying of Setup SystemD Shipping Service
-cp $SCRIPT_DIR/9-shipping.service /etc/systemd/system/shipping.service
-
-#Loading the sevice, for to know systemd folder, where the data has loaded for systemctl
-systemctl daemon-reload &>> $LOG_FILE
-VALIDATE $? "Reloading daemon service"
-
-# Enabling and starting shipping service
-systemctl enable shipping &>> $LOG_FILE
-VALIDATE $? "Enabling shipping"
-systemctl start shipping &>> $LOG_FILE
-VALIDATE $? "Starting shipping"
+systemd_setup
 
 # installing mysql client. We need to load the schema to mysql db
 dnf install mysql -y  &>>$LOG_FILE
