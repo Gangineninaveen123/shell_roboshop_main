@@ -113,8 +113,22 @@ maven_setup(){
     mv target/shipping-1.0.jar shipping.jar &>> $LOG_FILE
     VALIDATE $? "Moving and renaming the Jar file"
 }
-#, here $1 -> means takes exit code $? as input $2 argument, which is given in the code, while calliong function
 
+#python setup
+python_setup(){
+    #Installing Python 3
+    dnf install python3 gcc python3-devel -y &>>$LOG_FILE
+    VALIDATE $? "Installing Python 3"
+    #Installoing Dependencies - Every application is developed by development team will have some common softwares that they use as libraries. This application also have the same way of defined dependencies in the application configuration.
+    cd /app
+    pip3 install -r requirements.txt &>>$LOG_FILE
+    VALIDATE $? "Installing requirements.txt Build file"
+    #setting up a new service in systemd so systemctl can manage this service
+    cp $SCRIPT_DIR/payment.service /etc/systemd/system/payment.service
+    VALIDATE $? "Copying payment services"
+}
+
+#, here $1 -> means takes exit code $? as input $2 argument, which is given in the code, while calliong function
 VALIDATE()
 {
      if [ $1 -eq 0 ]  # the exit code represents always sucess
