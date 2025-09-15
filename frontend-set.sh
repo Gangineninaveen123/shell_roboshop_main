@@ -9,7 +9,7 @@ failure()
 }
 #trap function gives exactly which line got error and which command got failed
 #calling failure function
-trap 'failure "${LINE_NO}" "${BASH_COMMAND}"'
+trap 'failure "${LINE_NO}" "${BASH_COMMAND}"' ERR
 
 #start time
 START_TIME=$(date +%s)
