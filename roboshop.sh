@@ -13,7 +13,7 @@ INSTANCES=("mongodb" "reddis" "mysql" "rabbitmq" "catalougue" "user" "cart" "shi
 
 
 #Creating Zone id in route53
-ZONE_ID="Z0373351299AU3JG23M5V" # Replace with own ZONE_ID
+ZONE_ID="Z0446603M577BRUXUXUJ" # Replace with own ZONE_ID
 #Creating Domain Name in route 53
 DOMAIN_NAME="muruga.site"  #Replace with own DOMAIN_NAME
 

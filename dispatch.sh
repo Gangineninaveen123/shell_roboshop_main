@@ -49,6 +49,12 @@ VALIDATE()
     fi
 }
 
+
+# installing golang language
+dnf install golang -y &>>$LOG_FILE
+VALIDATE $? "Installing golang language is sucessfull"
+
+
 #Creating system user roboshop to run the roboshop app
 #while, running it on second time, i got an error at system user gort failed, so using idempotency : sol for this is idempotency->, which irrespective of the number of times you run, nothing changes
 
