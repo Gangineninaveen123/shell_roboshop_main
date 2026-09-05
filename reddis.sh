@@ -1,7 +1,7 @@
 #!/bin/bash
 source ./commoncode.sh
 #Appname or module name
-App_Name=reddis
+App_Name=redis
 
 #checking app is running with root access or not and calling function
 check_root

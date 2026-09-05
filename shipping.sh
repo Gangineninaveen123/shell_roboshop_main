@@ -29,7 +29,7 @@ systemd_setup
 dnf install mysql -y  &>>$LOG_FILE
 VALIDATE $? "Installing MYSQL client"
 
-#loading data to mysql db by the help of below query
+#loading data to mysql db by the help of below query [where cities table present in schema.sql table, whikle opoening the code after downloading to see.]
 mysql -h mysql.muruga.site -u root -p$MYSQL_ROOT_PASSWORD -e 'use cities'
 if [ $? -ne 0 ]
 then

@@ -9,6 +9,8 @@ failure()
 }
 #trap function gives exactly which line got error and which command got failed
 #calling failure function
+#search in google-> trap command in shell script for exact line it failed and and exact command, both LINENO and BASH_COMMAND are speacial variables.
+
 trap 'failure "${LINENO}" "${BASH_COMMAND}"' ERR
 
 #start time

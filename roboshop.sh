@@ -2,7 +2,7 @@
 
 # creating AMI ID , from ec2 previous instance
 
-AMI_ID="ami-09c813fb71547fc4f"
+AMI_ID="ami-0220d79f3f480ecf5"
 # SAME LIKE AMI, TAKE SG ID
 SG_ID="sg-0d8d7189bee7912bc"  # replace with our own SG_ID
 #Subnet its going to default, so no worries for now
@@ -13,16 +13,16 @@ INSTANCES=("mongodb" "reddis" "mysql" "rabbitmq" "catalougue" "user" "cart" "shi
 
 
 #Creating Zone id in route53
-ZONE_ID="Z0446603M577BRUXUXUJ" # Replace with own ZONE_ID
+ZONE_ID="Z09000942IQE9E07VWWVE" # Replace with own ZONE_ID
 #Creating Domain Name in route 53
-DOMAIN_NAME="muruga.site"  #Replace with own DOMAIN_NAME
+DOMAIN_NAME="karthikeya.site"  #Replace with own DOMAIN_NAME
 
 #Now using loop concept to download all the instances
 
 for instance in $@  # Here no need to create all the instances at once before practicing only, in run time, how many instances required , then that many instances will be passed to the runtime script while executing
 do
 
-    INSTACE_ID=$(aws ec2 run-instances --image-id ami-09c813fb71547fc4f --instance-type t3.micro --security-group-ids sg-0d8d7189bee7912bc --tag-specifications "ResourceType=instance,Tags=[{Key=Name, Value=$instance}]" --query 'Instances[0].InstanceId' --output text)  # have instance id is replaced in the place of private ip, due to which public ip need to be query in this soo
+    INSTACE_ID=$(aws ec2 run-instances --image-id ami-0220d79f3f480ecf5 --instance-type t3.micro --security-group-ids sg-0d8d7189bee7912bc --tag-specifications "ResourceType=instance,Tags=[{Key=Name, Value=$instance}]" --query 'Instances[0].InstanceId' --output text)  # have instance id is replaced in the place of private ip, due to which public ip need to be query in this soo
     if [ $instance != "frontend" ]
     then
         IP=$(aws ec2 describe-instances --instance-ids $INSTACE_ID --query 'Reservations[0].Instances[0].PrivateIpAddress' --output text)

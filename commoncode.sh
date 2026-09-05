@@ -26,6 +26,31 @@ mkdir -p $LOGS_FOLDER
 # script starting date and time, so easy like like which script executes at what time and need to store in LOG_FILE
 echo "Script started and executed at: $(date)" | tee -a $LOG_FILE
 
+# Checking user has root previlages to run or not
+check_root(){
+    if [ $USERID -ne 0 ]
+    then
+        echo -e " $R ERROR:: Please run the shell script with root user $N" | tee -a $LOG_FILE # here $R which starts colour as Red, and at ending $N ll make it as Normal.
+        exit 1 # give other than zero[1-127] as exit code, so it ll not move forward from this step.
+    else
+        echo "You are running with root user" | tee -a $LOG_FILE
+
+    fi
+}
+
+#, here $1 -> means takes exit code $? as input $2 argument, which is given in the code, while calliong function
+VALIDATE()
+{
+     if [ $1 -eq 0 ]  # the exit code represents always sucess
+    then
+        echo -e " $2 is $G  Sucessfull.... $N" | tee -a $LOG_FILE
+    else
+        echo -e " $2 $R  is failure.... $N" | tee -a $LOG_FILE
+        exit 1 # when ever the failure is there in shell script, then we should automatically give exit than zero, mainly 1
+    fi
+}
+
+
 # Creating app directory and app setup
 app_setup(){
     #Creating system user roboshop to run the roboshop app
@@ -86,18 +111,6 @@ systemd_setup(){
     systemctl start $App_Name &>>$LOG_FILE
     VALIDATE $? "daemon-reload, enable and start $App_Name"
 }
-# Checking user has root previlages to run or not
-check_root(){
-    if [ $USERID -ne 0 ]
-    then
-        echo -e " $R ERROR:: Please run the shell script with root user $N" | tee -a $LOG_FILE # here $R which starts colour as Red, and at ending $N ll make it as Normal.
-        exit 1 # give other than zero[1-127] as exit code, so it ll not move forward from this step.
-    else
-        echo "You are running with root user" | tee -a $LOG_FILE
-
-    fi
-}
-
 
 #Maven setup
 maven_setup(){
@@ -109,7 +122,7 @@ maven_setup(){
     mvn clean package  &>> $LOG_FILE
     VALIDATE $? "Packaging the shipping application"
 
-    #Moving and renaming the Jar file
+    #Moving and renaming the Jar file, right now renaming the file.
     mv target/shipping-1.0.jar shipping.jar &>> $LOG_FILE
     VALIDATE $? "Moving and renaming the Jar file"
 }
@@ -128,17 +141,6 @@ python_setup(){
     VALIDATE $? "Copying payment services"
 }
 
-#, here $1 -> means takes exit code $? as input $2 argument, which is given in the code, while calliong function
-VALIDATE()
-{
-     if [ $1 -eq 0 ]  # the exit code represents always sucess
-    then
-        echo -e " $2 is $G  Sucessfull.... $N" | tee -a $LOG_FILE
-    else
-        echo -e " $2 $R  is failure.... $N" | tee -a $LOG_FILE
-        exit 1 # when ever the failure is there in shell script, then we should automatically give exit than zero, mainly 1
-    fi
-}
 
 #Printing total time, how much the app takes to executes all the code
 
